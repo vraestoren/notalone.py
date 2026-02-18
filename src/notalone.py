@@ -1,13 +1,13 @@
-import requests
-
+from requests import Session
 
 class NotAlone:
 	def __init__(self) -> None:
 		self.api = "https://api.notalone.tv"
 		self.api_key = "odsu6JggH90Z1D69AVCw"
-		self.headers = {
-			"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36",
-			"x-requested-with": "XMLHttpRequest"
+		self.session = Session()
+		self.session.headers = {
+			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36",
+			"X-Requested-With": "XMLHttpRequest"
 		}
 		self.token = None
 		self.user_id = None
@@ -21,10 +21,8 @@ class NotAlone:
 			"login": login,
 			"password": password
 		}
-		return requests.post(
-			f"{self.api}/auth",
-			data=data,
-			headers=self.headers).json()
+		response = self.session.post(
+			f"{self.api}/auth", data=data).json()
 		if "token" in response["data"]:
 			self.token = response["data"]["token"]
 			self.user_id = response["data"]["id"]
@@ -45,30 +43,24 @@ class NotAlone:
 			"nickname": nickname,
 			"gender": gender
 		}
-		return requests.post(
-			f"{self.api}/register",
-			data=data,
-			headers=self.headers).json()
+		return self.session.post(
+			f"{self.api}/register", data=data).json()
 
 	def get_user_info(self, user_id: int) -> dict:
 		data = {
 			"apiKey": self.api_key,
 			"userID": user_id
 		}
-		return requests.post(
-			f"{self.api}/getUser",
-			data=data,
-			headers=self.headers).json()
+		return self.session.post(
+			f"{self.api}/getUser", data=data).json()
 
 	def get_user_rooms(self, user_id: int) -> dict:
 		data = {
 			"apiKey": self.api_key,
 			"userID": user_id
 		}
-		return requests.post(
-			f"{self.api}/getUserRooms",
-			data=data,
-			headers=self.headers).json()
+		return self.session.post(
+			f"{self.api}/getUserRooms", data=data).json()
 
 	def get_user_favorites(
 			self,
@@ -81,10 +73,8 @@ class NotAlone:
 			"status": status,
 			"page": page
 		}
-		return requests.post(
-			f"{self.api}/getUserFavorites",
-			data=data,
-			headers=self.headers).json()
+		return self.session.post(
+			f"{self.api}/getUserFavorites", data=data).json()
 
 	def get_catalog(
 			self,
@@ -99,65 +89,51 @@ class NotAlone:
 			"genres": genres,
 			"years": years
 		}
-		return requests.post(
-			f"{self.api}/getCatalog",
-			data=data,
-			headers=self.headers).json()
+		return self.session.post(
+			f"{self.api}/getCatalog", data=data).json()
 
 	def get_catalog_item(self, item_id: int) -> dict:
 		data = {
 			"apiKey": self.api_key,
 			"itemID": item_id
 		}
-		return requests.post(
-			f"{self.api}/getCatalogItem",
-			data=data,
-			headers=self.headers).json()
+		return self.session.post(
+			f"{self.api}/getCatalogItem", data=data).json()
 
 	def get_catalog_newest(self, page: int = 1) -> dict:
 		data = {
 			"apiKey": self.api_key,
 			"page": page
 		}
-		return requests.post(
-			f"{self.api}/getCatalogNewest",
-			data=data,
-			headers=self.headers).json()
+		return self.session.post(
+			f"{self.api}/getCatalogNewest", data=data).json()
 
 	def get_catalog_popular(self, page: int = 1) -> dict:
 		data = {
 			"apiKey": self.api_key,
 			"page": page
 		}
-		return requests.post(
-			f"{self.api}/getCatalogPopular",
-			data=data,
-			headers=self.headers).json()
+		return self.session.post(
+			f"{self.api}/getCatalogPopular", data=data).json()
 
 	def search_catalog(self, query: str) -> dict:
 		data = {
 			"apiKey": self.api_key,
 			"query": query
 		}
-		return requests.post(
-			f"{self.api}/catalogSearch",
-			data=data,
-			headers=self.headers).json()
+		return self.session.post(
+			f"{self.api}/catalogSearch", data=data).json()
 
 	def get_genres(self) -> dict:
 		data = {
 			"apiKey": self.api_key
 		}
-		return requests.post(
-			f"{self.api}/getGenres",
-			data=data,
-			headers=self.headers).json()
+		return self.session.post(
+			f"{self.api}/getGenres", data=data).json()
 
 	def get_countries(self) -> dict:
 		data = {
 			"apiKey": self.api_key
 		}
-		return requests.post(
-			f"{self.api}/getCountries",
-			data=data,
-			headers=self.headers).json()
+		return self.session.post(
+			f"{self.api}/getCountries", data=data).json()
